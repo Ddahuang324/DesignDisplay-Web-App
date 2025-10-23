@@ -50,7 +50,7 @@ const Hero: React.FC = () => {
                 {slides.map((src, index) => (
                     <div
                         key={src}
-                        className={`absolute inset-0 bg-cover bg-center transition-opacity duration-[1500ms] ${index === currentSlide ? 'opacity-100 animate-fade-in' : 'opacity-0'}`}
+                        className={`absolute inset-0 bg-cover bg-center transition-opacity duration-[1500ms] ${index === currentSlide ? 'opacity-100' : 'opacity-0'} ${index % 2 === 0 ? 'animate-kenburns' : 'animate-kenburns-rev'}`}
                         style={{ backgroundImage: `url("${src}")` }}
                     />
                 ))}

@@ -39,7 +39,7 @@ const Cases: React.FC = () => {
     const [ref, isVisible] = useInView({ threshold: 0.1 });
 
     return (
-        <section id="cases" ref={ref} className={`py-16 md:py-24 bg-background-light dark:bg-background-dark transition-opacity duration-1000 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+        <section id="cases" ref={ref} className={`py-16 md:py-24 bg-background-light dark:bg-transparent animated-bg-dark ${isVisible ? 'aurora-visible' : ''}`}>
             <div className={`container mx-auto px-4 ${isVisible ? 'section-visible' : ''}`}>
                 <div className="text-center mb-12">
                     <h2 className="text-3xl md:text-4xl font-bold text-text-dark dark:text-text-light">我们的案例</h2>

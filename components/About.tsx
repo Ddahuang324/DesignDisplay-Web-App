@@ -26,7 +26,7 @@ const About: React.FC = () => {
     };
 
     return (
-        <section id="about" ref={ref} className={`py-16 md:py-24 bg-background-light dark:bg-secondary/10 transition-opacity duration-1000 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+        <section id="about" ref={ref} className={`py-16 md:py-24 bg-background-light dark:bg-transparent animated-bg-dark ${isVisible ? 'aurora-visible' : ''}`}>
             <div className={`container mx-auto px-4 ${isVisible ? 'section-visible' : ''}`}>
                 <div className="flex flex-col lg:flex-row items-center gap-12">
                     <div className="lg:w-1/2">
