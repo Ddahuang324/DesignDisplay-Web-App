@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Decoration Co. | Interior Design</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#A72608",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#1a1a1a",
+                        "text-light": "#f5f5f5",
+                        "text-dark": "#1a1a1a",
+                        "accent": "#F2E8CF",
+                        "secondary": "#4a4a4a"
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 1.5s ease-in-out',
+                        'fade-out': 'fadeOut 1.5s ease-in-out',
+                        'slide-in-up': 'slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both'
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        fadeOut: {
+                            '0%': { opacity: '1' },
+                            '100%': { opacity: '0' },
+                        },
+                        slideInUp: {
+                           '0%': { transform: 'translateY(100px)', opacity: '0' },
+                           '100%': { transform: 'translateY(0)', opacity: '1' },
+                        }
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .section-visible {
+            animation: slide-in-up 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/"
+  }
+}
+</script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-dark dark:text-text-light">
+    <div id="root"></div>
+</body>
+</html>
