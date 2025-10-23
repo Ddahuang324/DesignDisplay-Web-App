@@ -1,9 +1,45 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useInView } from '../hooks/useInView';
+import { useMousePosition } from '../hooks/useMousePosition';
 
 const About: React.FC = () => {
-    const [ref, isVisible] = useInView({ threshold: 0.2 });
+    const [sectionRef, isVisible] = useInView<HTMLElement>({ threshold: 0.2 });
+    const mousePosRef = useMousePosition();
+
+    useEffect(() => {
+        const section = sectionRef.current;
+        if (!section) return;
+
+        let rafId: number | null = null;
+        const onMove = () => {
+            if (rafId != null) return;
+            rafId = requestAnimationFrame(() => {
+                const rect = section.getBoundingClientRect();
+                const { x, y } = mousePosRef.current;
+                const nx = ((x - rect.left) / rect.width) * 2 - 1;
+                const ny = ((y - rect.top) / rect.height) * 2 - 1;
+                const moveX = Math.max(-1, Math.min(1, nx)) * 40;
+                const moveY = Math.max(-1, Math.min(1, ny)) * 40;
+                section.style.setProperty('--mouse-x', `${moveX}px`);
+                section.style.setProperty('--mouse-y', `${moveY}px`);
+                const mouseX = x - rect.left - 160;
+                const mouseY = y - rect.top - 160;
+                section.style.setProperty('--cursor-x', `${mouseX}px`);
+                section.style.setProperty('--cursor-y', `${mouseY}px`);
+                rafId = null;
+            });
+        };
+
+        const start = () => section.addEventListener('pointermove', onMove, { passive: true });
+        const stop = () => section.removeEventListener('pointermove', onMove as any);
+
+        if (isVisible) start(); else stop();
+        return () => {
+            stop();
+            if (rafId != null) cancelAnimationFrame(rafId);
+        };
+    }, [isVisible, mousePosRef, sectionRef]);
 
     const handleScrollTo = (e: React.MouseEvent<HTMLAnchorElement>) => {
         e.preventDefault();
@@ -26,7 +62,11 @@ const About: React.FC = () => {
     };
 
     return (
-        <section id="about" ref={ref} className={`py-16 md:py-24 bg-background-light dark:bg-transparent animated-bg-dark ${isVisible ? 'aurora-visible' : ''}`}>
+        <section 
+            id="about" 
+            ref={sectionRef}
+            className={`py-16 md:py-24 bg-background-light dark:bg-transparent animated-bg-dark ${isVisible ? 'aurora-visible' : ''}`}
+        >
             <div className={`container mx-auto px-4 ${isVisible ? 'section-visible' : ''}`}>
                 <div className="flex flex-col lg:flex-row items-center gap-12">
                     <div className="lg:w-1/2">
@@ -44,7 +84,7 @@ const About: React.FC = () => {
                         <p className="text-gray-600 dark:text-gray-400 mb-6">
                             我们的团队由充满激情和创意的设计师组成，致力于为每一位客户打造独一无二、兼具功能性与艺术性的居住和工作空间。从概念构思到最终落地，我们注重每一个细节，确保最终成果超越您的期待。
                         </p>
-                        <a href="#contact" onClick={handleScrollTo} className="min-w-[120px] max-w-[480px] cursor-pointer inline-flex items-center justify-center overflow-hidden rounded-full h-12 px-6 bg-primary text-accent text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors">
+                        <a href="#contact" onClick={handleScrollTo} className="gpu min-w-[120px] max-w-[480px] cursor-pointer inline-flex items-center justify-center overflow-hidden rounded-full h-12 px-6 bg-primary text-accent text-base font-bold leading-normal tracking-[0.015em] transition-transform duration-200 hover:scale-[1.03] hover:bg-primary/90">
                             <span className="truncate">与我们合作</span>
                         </a>
                     </div>

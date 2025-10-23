@@ -1,12 +1,52 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useInView } from '../hooks/useInView';
+import { useMousePosition } from '../hooks/useMousePosition';
 
 const Contact: React.FC = () => {
-    const [ref, isVisible] = useInView({ threshold: 0.1 });
+    const [sectionRef, isVisible] = useInView<HTMLElement>({ threshold: 0.1 });
+    const mousePosRef = useMousePosition();
+
+    useEffect(() => {
+        const section = sectionRef.current;
+        if (!section) return;
+
+        let rafId: number | null = null;
+        const onMove = () => {
+            if (rafId != null) return;
+            rafId = requestAnimationFrame(() => {
+                const rect = section.getBoundingClientRect();
+                const { x, y } = mousePosRef.current;
+                const nx = ((x - rect.left) / rect.width) * 2 - 1;
+                const ny = ((y - rect.top) / rect.height) * 2 - 1;
+                const moveX = Math.max(-1, Math.min(1, nx)) * 40;
+                const moveY = Math.max(-1, Math.min(1, ny)) * 40;
+                section.style.setProperty('--mouse-x', `${moveX}px`);
+                section.style.setProperty('--mouse-y', `${moveY}px`);
+                const mouseX = x - rect.left - 160;
+                const mouseY = y - rect.top - 160;
+                section.style.setProperty('--cursor-x', `${mouseX}px`);
+                section.style.setProperty('--cursor-y', `${mouseY}px`);
+                rafId = null;
+            });
+        };
+
+        const start = () => section.addEventListener('pointermove', onMove, { passive: true });
+        const stop = () => section.removeEventListener('pointermove', onMove as any);
+
+        if (isVisible) start(); else stop();
+        return () => {
+            stop();
+            if (rafId != null) cancelAnimationFrame(rafId);
+        };
+    }, [isVisible, mousePosRef, sectionRef]);
 
     return (
-        <section id="contact" ref={ref} className={`py-16 md:py-24 bg-background-light dark:bg-transparent animated-bg-dark ${isVisible ? 'aurora-visible' : ''}`}>
+        <section 
+            id="contact" 
+            ref={sectionRef}
+            className={`py-16 md:py-24 bg-background-light dark:bg-transparent animated-bg-dark ${isVisible ? 'aurora-visible' : ''}`}
+        >
             <div className={`container mx-auto px-4 ${isVisible ? 'section-visible' : ''}`}>
                 <div className="text-center mb-12">
                     <h2 className="text-3xl md:text-4xl font-bold text-text-dark dark:text-text-light">联系我们</h2>
